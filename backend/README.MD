@@ -14,7 +14,7 @@ Backend source code of mysite
   - paste,POST,{content:text-to-paste}
   - getall
 - file-transfer
-  - put,POST,multipart/form-data
+  - upload,POST,multipart/form-data
   - listall
   - download?name
 

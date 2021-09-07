@@ -1,9 +1,8 @@
 import os
 from flask import Flask
 from flask import request, abort
-from queue import SimpleQueue
 from collections import deque
-from flask.helpers import send_from_directory, url_for
+from flask.helpers import send_from_directory
 import urllib.parse
 
 APP_BASE_DIR_PATH = "/data/site-of-jeff/"
@@ -25,7 +24,7 @@ def addToPastor(text):
 FILE_TRANSFER_DIR_PATH = APP_BASE_DIR_PATH + "file-transfer/"
 
 
-def putFile(file):
+def saveFile(file):
     # Bug: filename maybe fake, werkzeug.secure_filename() can help, but won't work for Chinese
     file.save(FILE_TRANSFER_DIR_PATH + urllib.parse.quote(file.filename))
 
@@ -69,10 +68,10 @@ def pastorPaste():
         return wrapResp("Text not found", ok=False)
 
 
-@app.route("/api/file-transfer/put", methods=["POST"])
-def fileTransferPutFile():
-    putFile(request.files['file'])
-    return wrapResp("Doone")
+@app.route("/api/file-transfer/upload", methods=["POST"])
+def fileTransferUploadFile():
+    saveFile(request.files['file'])
+    return wrapResp("Done")
 
 
 @app.route("/api/file-transfer/listall", methods=["GET"])

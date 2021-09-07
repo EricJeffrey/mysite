@@ -118,6 +118,7 @@ a {
 }
 
 .filetransfer-filehoder {
+    flex-direction: row;
     padding: 1em;
     width: 100%;
     border: 1px solid lightgray;
@@ -131,4 +132,8 @@ a {
 
 .filetransfer-filehoder:last-child {
     border-bottom: 1px solid lightgray;
+}
+
+.filetransfer-filelink {
+    flex-grow: 1;
 }

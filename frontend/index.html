@@ -12,13 +12,7 @@
     <!-- production env -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script> -->
 
-    <!-- ElementUi -->
-    <!-- 引入样式 -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
-    <!-- 引入组件库 -->
-    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
-
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/static/css/index.css">
 </head>
 
 <body>
@@ -38,7 +32,7 @@
             <div id="pastor" v-if="which == 0">
                 <div id="pastor-left">
                     <textarea name="pastor-textarea" id="pastor-textarea" cols="30" rows="10"></textarea>
-                    <button id="pastor-pastebtn">粘贴</button>
+                    <button id="pastor-pastebtn" v-on:click="pastor.paste()">粘贴</button>
                 </div>
                 <div id="pastor-right">
                     <ul id="pastor-list">
@@ -61,7 +55,10 @@
                     <ul id="filetransfer-list">
                         <li v-for="item in filetransfer.filelist">
                             <div class="filetransfer-filehoder">
-                                <a :href="filetransfer.makeFileUrl(item)" target="_">{{item}}</a>
+                                <a :href="filetransfer.makeFileUrl(item.name)" target="_" class="filetransfer-filelink">
+                                    {{item.name}}
+                                </a>
+                                <span>{{item.size.toFixed(3)}}MB</span>
                             </div>
                         </li>
                     </ul>
@@ -76,33 +73,72 @@
                 which: 0,
                 pastor: {
                     textlist: ["placeholder"],
+                    loadList: function () {
+                        fetch("/api/pastor/getall").then(v => v.json()).then(v => {
+                            this.textlist = v.content;
+                        }).catch(reason => {
+                            alert("出错了");
+                            console.log(reason);
+                        });
+                    },
                     paste: function () {
                         let text = document.getElementById("pastor-textarea").value;
+                        fetch("/api/pastor/paste", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ content: text })
+                        }).then(v => v.json()).then(v => this.loadList()).catch(reason => {
+                            alert("出错了");
+                            console.error(reason);
+                        })
                     }
                 },
                 filetransfer: {
-                    filelist: ["sdf.txt", "sdf你哈.rar"],
-                    makeFileUrl: function (filename) { 
+                    filelist: [{ name: "placeholder.txt", size: 0.3325 }],
+                    loadAllFile: function () {
+                        fetch("/api/file-transfer/listall").then(v => v.json()).then(v => {
+                            this.filelist = v.content;
+                        }).catch(reason => {
+                            alert("出错了");
+                            console.log(reason);
+                        });
+                    },
+                    makeFileUrl: function (filename) {
                         return "/api/file-transfer/download?name=" + encodeURI(filename);
                     },
-                    upload: function () { }
+                    upload: function () {
+                        const data = new FormData();
+                        data.append("file", document.getElementById("filetransfer-selector").files[0]);
+                        fetch("/api/file-transfer/upload", {
+                            method: "POST",
+                            body: data
+                        }).then(v => v.json()).then(v => this.loadAllFile()).catch(reason => {
+                            alert("出错了");
+                            console.log(reason);
+                        })
+                    }
                 },
                 copyText: function (text) {
-                    console.log(text);
+                    navigator.clipboard.writeText(text);
                 },
-                switchPage: function (which) {
-                    this.which = which;
-                    if (which == 0) {
+                switchPage: function (to) {
+                    this.which = to;
+                    if (to == 0) {
+                        this.pastor.loadList();
                         setTimeout(() => {
-                            document.getElementById("pastor-text").focus();
+                            document.getElementById("pastor-textarea").focus();
                         }, 300);
+                    } else if (to == 1) {
+                        this.filetransfer.loadAllFile();
                     }
                 }
+            },
+            mounted: function () {
+                this.switchPage(0);
             }
         });
-        setTimeout(() => {
-            document.getElementById("pastor-text").focus();
-        }, 300);
     </script>
 </body>
 
