@@ -1,0 +1,134 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+div {
+    display: flex;
+}
+
+#app {
+    flex-direction: column;
+}
+
+#header {
+    flex-direction: row;
+    justify-content: center;
+    box-shadow: lightgray 1px -1px 12px;
+}
+
+.menu-item {
+    flex-direction: column;
+    cursor: pointer;
+    align-items: center;
+    padding: 15px 10px;
+    margin: 0px 10px;
+    transition: all 300ms ease;
+}
+
+.bar {
+    margin-top: 5px;
+    width: 100%;
+    height: 2px;
+    background-color: dodgerblue;
+}
+
+.menu-item:hover {
+    background-color: rgb(228, 228, 228);
+}
+
+#pastor, #filetransfer {
+    flex-direction: row;
+    width: 100%;
+    padding: 20px 10px;
+}
+
+#pastor-left, #filetransfer-left {
+    flex-direction: column;
+    flex: 1;
+}
+
+#pastor-right, #filetransfer-right {
+    flex: 1;
+    max-width: 50%;
+    flex-direction: column;
+    margin-left: 2em;
+}
+
+#pastor-right * {
+    max-width: 98%;
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+li {
+    display: block;
+}
+
+button {
+    padding: 1em;
+}
+
+a {
+    text-decoration: none;
+}
+
+#pastor-pastebtn {
+    margin-top: 1em;
+}
+
+.pastor-textholder {
+    flex-direction: column;
+    padding: 1em;
+    margin-bottom: 2em;
+    border: 1px solid lightgray;
+    transition: all 300ms ease;
+}
+
+.pastor-textholder:hover {
+    box-shadow: 1px 1px 24px lightgray;
+}
+
+.pastor-text {
+    margin: 0px;
+    margin-right: 1em;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.pastor-copybtn {
+    color: dodgerblue;
+    cursor: pointer;
+    font-size: small;
+}
+
+#filetransfer-selector {
+    margin-bottom: 1em;
+}
+
+#filetransfer-list {
+    width: 90%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.filetransfer-filehoder {
+    padding: 1em;
+    width: 100%;
+    border: 1px solid lightgray;
+    border-bottom: none;
+    transition: all 300ms ease;
+}
+
+.filetransfer-filehoder:hover {
+    background-color: rgb(226, 226, 226);
+}
+
+.filetransfer-filehoder:last-child {
+    border-bottom: 1px solid lightgray;
+}

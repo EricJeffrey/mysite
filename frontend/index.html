@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeffrey's Blog</title>
+
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <!-- production env -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script> -->
+
+    <!-- ElementUi -->
+    <!-- 引入样式 -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+    <!-- 引入组件库 -->
+    <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <div id="app">
+        <div id="header">
+            <div class="menu-item" tabindex="0" v-on:click="switchPage(0)">
+                <span>剪贴板Pastor</span>
+                <span v-if="which == 0" class="bar"></span>
+            </div>
+            <div class="menu-item" tabindex="0" v-on:click="switchPage(1)">
+                <span>文件中转FileTransfer</span>
+                <span v-if="which == 1" class="bar"></span>
+            </div>
+        </div>
+        <div id="content">
+            <!-- 条件渲染 -->
+            <div id="pastor" v-if="which == 0">
+                <div id="pastor-left">
+                    <textarea name="pastor-textarea" id="pastor-textarea" cols="30" rows="10"></textarea>
+                    <button id="pastor-pastebtn">粘贴</button>
+                </div>
+                <div id="pastor-right">
+                    <ul id="pastor-list">
+                        <li v-for="item in pastor.textlist">
+                            <div class="pastor-textholder">
+                                <span class="pastor-copybtn" v-on:click="copyText(item)">复制</span>
+                                <pre class="pastor-text">{{item}}</pre>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="filetransfer" v-if="which == 1">
+                <div id="filetransfer-left">
+                    <input type="file" name="filetransfer-selector" id="filetransfer-selector">
+                    <button id="filetransfer-uploadbtn" v-on:click="filetransfer.upload()">上传</button>
+                </div>
+                <div id="filetransfer-right">
+                    <span style="font-weight: bold;font-size: large;margin-bottom: 1em;">文件列表</span>
+                    <ul id="filetransfer-list">
+                        <li v-for="item in filetransfer.filelist">
+                            <div class="filetransfer-filehoder">
+                                <a :href="filetransfer.makeFileUrl(item)" target="_">{{item}}</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                which: 0,
+                pastor: {
+                    textlist: ["placeholder"],
+                    paste: function () {
+                        let text = document.getElementById("pastor-textarea").value;
+                    }
+                },
+                filetransfer: {
+                    filelist: ["sdf.txt", "sdf你哈.rar"],
+                    makeFileUrl: function (filename) { 
+                        return "/api/file-transfer/download?name=" + encodeURI(filename);
+                    },
+                    upload: function () { }
+                },
+                copyText: function (text) {
+                    console.log(text);
+                },
+                switchPage: function (which) {
+                    this.which = which;
+                    if (which == 0) {
+                        setTimeout(() => {
+                            document.getElementById("pastor-text").focus();
+                        }, 300);
+                    }
+                }
+            }
+        });
+        setTimeout(() => {
+            document.getElementById("pastor-text").focus();
+        }, 300);
+    </script>
+</body>
+
+</html>
