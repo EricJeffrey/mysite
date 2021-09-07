@@ -76,6 +76,11 @@
                     loadList: function () {
                         fetch("/api/pastor/getall").then(v => v.json()).then(v => {
                             this.textlist = v.content;
+                            let pastorTextarea = document.getElementById("pastor-textarea");
+                            if (pastorTextarea) {
+                                pastorTextarea.value = "";
+                                pastorTextarea.focus();
+                            }
                         }).catch(reason => {
                             alert("出错了");
                             console.log(reason);
