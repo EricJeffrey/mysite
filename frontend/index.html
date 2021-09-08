@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <!-- production env -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
 
     <link rel="stylesheet" href="/static/css/index.css">
 </head>
@@ -38,7 +39,8 @@
                     <ul id="pastor-list">
                         <li v-for="item in pastor.textlist">
                             <div class="pastor-textholder">
-                                <span class="pastor-copybtn" v-on:click="copyText(item)">复制</span>
+                                <span class="pastor-copybtn" data-clipboard-target=".pastor-text"
+                                    v-on:click="copyText(item)">复制</span>
                                 <pre class="pastor-text">{{item}}</pre>
                             </div>
                         </li>
@@ -76,6 +78,7 @@
                     loadList: function () {
                         fetch("/api/pastor/getall").then(v => v.json()).then(v => {
                             this.textlist = v.content;
+                            new ClipboardJS(".pastor-copybtn");
                             let pastorTextarea = document.getElementById("pastor-textarea");
                             if (pastorTextarea) {
                                 pastorTextarea.value = "";
@@ -126,7 +129,7 @@
                     }
                 },
                 copyText: function (text) {
-                    navigator.clipboard.writeText(text);
+                    // navigator.clipboard.writeText(text); // work on https only
                 },
                 switchPage: function (to) {
                     this.which = to;
