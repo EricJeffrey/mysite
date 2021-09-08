@@ -37,11 +37,11 @@
                 </div>
                 <div id="pastor-right">
                     <ul id="pastor-list">
-                        <li v-for="item in pastor.textlist">
+                        <li v-for="(item, index) in pastor.textlist">
                             <div class="pastor-textholder">
-                                <span class="pastor-copybtn" data-clipboard-target=".pastor-text"
+                                <span class="pastor-copybtn" :data-clipboard-target="'#pastor-text-'+index"
                                     v-on:click="copyText(item)">复制</span>
-                                <pre class="pastor-text">{{item}}</pre>
+                                <pre class="pastor-text" :id="'pastor-text-'+index">{{item}}</pre>
                             </div>
                         </li>
                     </ul>
